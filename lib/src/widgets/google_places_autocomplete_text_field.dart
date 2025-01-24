@@ -391,7 +391,7 @@ class _GooglePlacesAutoCompleteTextFormFieldState
               child: widget.overlayContainerBuilder?.call(_overlayChild) ??
                   Material(
                     elevation: 1.0,
-                    color: Colors.transparent,
+                    color: widget.overlayDecoration?.color ?? Colors.white,
                     borderRadius: widget.overlayDecoration?.borderRadius,
                     child: Container(
                       decoration: widget.overlayDecoration,
