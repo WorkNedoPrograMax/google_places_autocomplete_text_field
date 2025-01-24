@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _yourGoogleAPIKey = 'text';
+  final _yourGoogleAPIKey = 'test';
 
   // only needed if you build for the web
   final _yourProxyURL = 'https://your-proxy.com/';
@@ -76,6 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 maxLines: 1,
 
                 countries: ['ua'],
+                overlayDecoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
 
                 placeType: const City(),
                 onTapOutside: (_) {
