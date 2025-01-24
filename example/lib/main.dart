@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _yourGoogleAPIKey = 'test';
+  final _yourGoogleAPIKey = 'text';
 
   // only needed if you build for the web
   final _yourProxyURL = 'https://your-proxy.com/';
@@ -40,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _textController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
               autovalidateMode: _autovalidateMode,
               child: GooglePlacesAutoCompleteTextFormField(
                 textEditingController: _textController,
+                focusNode: _focusNode,
                 googleAPIKey: _yourGoogleAPIKey,
                 decoration: const InputDecoration(
                   hintText: 'Enter your address',
@@ -76,6 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 countries: ['ua'],
 
                 placeType: const City(),
+                onTapOutside: (_) {
+                  _focusNode.unfocus();
+                },
+                onSuggestionClicked: (Prediction prediction) {
+                  print(prediction.description);
+                },
               ),
             ),
             const SizedBox(height: 24),
