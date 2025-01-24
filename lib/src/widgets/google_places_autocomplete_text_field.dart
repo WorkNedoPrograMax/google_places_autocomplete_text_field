@@ -78,6 +78,7 @@ class GooglePlacesAutoCompleteTextFormField extends StatefulWidget {
     this.validator,
     this.maxHeight = 200,
     this.placeType,
+    this.onSuggestionsReceived,
     super.key,
   });
 
@@ -155,6 +156,8 @@ class GooglePlacesAutoCompleteTextFormField extends StatefulWidget {
 
   /// The type of the place you want to receive suggestions for.
   final PlaceType? placeType;
+
+  final void Function(List<Prediction> predicitons)? onSuggestionsReceived;
 
   // The following properties are the same as the ones in the TextFormField
   // widget. They are used to customize the text form field.
@@ -336,6 +339,7 @@ class _GooglePlacesAutoCompleteTextFormFieldState
 
     allPredictions.clear();
     allPredictions.addAll(predictions);
+    widget.onSuggestionsReceived?.call(predictions);
   }
 
   Future<void> getPlaceDetailsFromPlaceId(Prediction prediction) async {
