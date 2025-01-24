@@ -71,8 +71,8 @@ class GooglePlacesApi {
           await _dio.post(url, options: options, data: jsonEncode(requestBody));
       final subscriptionResponse =
           PlacesAutocompleteResponse.fromJson(response.data);
-      subscriptionResponse.predictions
-          ?.reformatDescriptionsBasedOnPlaceType(placeType);
+      subscriptionResponse.predictions?.reformatDescriptionsBasedOnPlaceType(
+          type: placeType, country: countries.firstOrNull);
       return subscriptionResponse;
     } catch (e) {
       debugPrint('GooglePlacesApi.getSuggestionsForInput: ${e.toString()}');

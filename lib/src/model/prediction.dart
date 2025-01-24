@@ -97,33 +97,31 @@ class Terms {
 }
 
 extension PredictionsExtension on List<Prediction> {
-  void reformatDescriptionsBasedOnPlaceType(PlaceType? type) {
+  void reformatDescriptionsBasedOnPlaceType(
+      {PlaceType? type, String? country}) {
     if (type != null) {
-      forEach(
-        (prediction) {
-          switch (type) {
-            case City():
-            case Street():
-            case PostalCode():
-              prediction.description =
-                  prediction.structuredFormatting?.mainText ??
-                      prediction.description;
-              break;
-            case Building():
-              var mainText = prediction.structuredFormatting?.mainText ??
-                  prediction.description;
-              mainText = mainText?.replaceFirst(type.street, '');
-              mainText = mainText?.trim();
-              if (mainText?[0] == ',') {
-                mainText = mainText?.substring(1);
-                mainText = mainText?.trim();
-
-                prediction.description = mainText;
-                break;
-              }
-          }
-        },
-      );
+      forEach((prediction) {
+        switch (type) {
+          case City():
+          case Street():
+          case PostalCode():
+            prediction.description =
+                prediction.structuredFormatting?.mainText ??
+                    prediction.description;
+            break;
+          case Building():
+            final text = prediction.structuredFormatting?.mainText ??
+                prediction.description ??
+                '';
+            prediction.description = _extractBuildingNumber(
+              text: text,
+              country: country ?? '',
+              city: type.city,
+              street: type.street,
+            );
+            break;
+        }
+      });
     }
 
     _removeDuplicates();
@@ -139,4 +137,33 @@ extension PredictionsExtension on List<Prediction> {
       return false;
     });
   }
+}
+
+String _extractBuildingNumber({
+  required String text,
+  required String country,
+  required String city,
+  required String street,
+}) {
+  // Remove the country name
+  text = text.replaceFirst(country, '');
+
+  // Remove the city name
+  text = text.replaceFirst(city, '');
+
+  // Remove the street name
+  text = text.replaceFirst(street, '');
+
+  // Trim whitespace
+  text = text.trim();
+
+  // Remove leading or trailing commas
+  if (text.startsWith(',')) {
+    text = text.substring(1).trim();
+  }
+  if (text.endsWith(',')) {
+    text = text.substring(0, text.length - 1).trim();
+  }
+
+  return text;
 }

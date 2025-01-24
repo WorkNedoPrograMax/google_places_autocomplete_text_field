@@ -79,6 +79,7 @@ class GooglePlacesAutoCompleteTextFormField extends StatefulWidget {
     this.maxHeight = 200,
     this.placeType,
     this.onSuggestionsReceived,
+    this.overlayDecoration,
     super.key,
   });
 
@@ -156,6 +157,8 @@ class GooglePlacesAutoCompleteTextFormField extends StatefulWidget {
 
   /// The type of the place you want to receive suggestions for.
   final PlaceType? placeType;
+
+  final BoxDecoration? overlayDecoration;
 
   final void Function(List<Prediction> predicitons)? onSuggestionsReceived;
 
@@ -388,7 +391,10 @@ class _GooglePlacesAutoCompleteTextFormFieldState
               child: widget.overlayContainerBuilder?.call(_overlayChild) ??
                   Material(
                     elevation: 1.0,
+                    color: Colors.transparent,
+                    borderRadius: widget.overlayDecoration?.borderRadius,
                     child: Container(
+                      decoration: widget.overlayDecoration,
                       constraints: BoxConstraints(
                         maxHeight: widget.maxHeight,
                       ),
