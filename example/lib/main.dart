@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _yourGoogleAPIKey = 'test-key';
+  final _yourGoogleAPIKey = 'test';
 
   // only needed if you build for the web
   final _yourProxyURL = 'https://your-proxy.com/';

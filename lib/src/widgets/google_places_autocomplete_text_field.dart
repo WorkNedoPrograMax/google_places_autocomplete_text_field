@@ -372,24 +372,26 @@ class _GooglePlacesAutoCompleteTextFormFieldState
       var offset = renderBox.localToGlobal(Offset.zero);
 
       return OverlayEntry(
-        builder: (context) => Positioned(
-          left: offset.dx,
-          top: size.height + offset.dy,
-          width: size.width,
-          child: CompositedTransformFollower(
-            showWhenUnlinked: false,
-            link: _layerLink,
-            offset: Offset(0.0, size.height + 5.0),
-            child: widget.overlayContainerBuilder?.call(_overlayChild) ??
-                Material(
-                  elevation: 1.0,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxHeight: widget.maxHeight,
+        builder: (context) => TextFieldTapRegion(
+          child: Positioned(
+            left: offset.dx,
+            top: size.height + offset.dy,
+            width: size.width,
+            child: CompositedTransformFollower(
+              showWhenUnlinked: false,
+              link: _layerLink,
+              offset: Offset(0.0, size.height + 5.0),
+              child: widget.overlayContainerBuilder?.call(_overlayChild) ??
+                  Material(
+                    elevation: 1.0,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxHeight: widget.maxHeight,
+                      ),
+                      child: _overlayChild,
                     ),
-                    child: _overlayChild,
                   ),
-                ),
+            ),
           ),
         ),
       );
