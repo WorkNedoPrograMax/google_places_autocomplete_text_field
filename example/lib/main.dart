@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _yourGoogleAPIKey = 'foo-bar-baz';
+  final _yourGoogleAPIKey = 'test-key';
 
   // only needed if you build for the web
   final _yourProxyURL = 'https://your-proxy.com/';
@@ -72,18 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 // proxyURL: _yourProxyURL,
                 maxLines: 1,
-                overlayContainerBuilder: (child) => Material(
-                  elevation: 1.0,
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  child: child,
-                ),
-                onPlaceDetailsWithCoordinatesReceived: (prediction) {
-                  print('placeDetails${prediction.lng}');
-                },
-                onSuggestionClicked: (Prediction prediction) =>
-                    _textController.text = prediction.description!,
-                minInputLength: 3,
+
+                countries: ['ua'],
+
+                placeType: const City(),
               ),
             ),
             const SizedBox(height: 24),

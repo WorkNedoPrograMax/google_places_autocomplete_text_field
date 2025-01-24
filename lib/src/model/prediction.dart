@@ -1,3 +1,5 @@
+import 'package:google_places_autocomplete_text_field/google_places_autocomplete_text_field.dart';
+
 class PlacesAutocompleteResponse {
   List<Prediction>? predictions;
   String? status;
@@ -91,5 +93,50 @@ class Terms {
   Terms.fromJson(Map<String, dynamic> json) {
     offset = json['offset'];
     value = json['value'];
+  }
+}
+
+extension PredictionsExtension on List<Prediction> {
+  void reformatDescriptionsBasedOnPlaceType(PlaceType? type) {
+    if (type != null) {
+      forEach(
+        (prediction) {
+          switch (type) {
+            case City():
+            case Street():
+            case PostalCode():
+              prediction.description =
+                  prediction.structuredFormatting?.mainText ??
+                      prediction.description;
+              break;
+            case Building():
+              var mainText = prediction.structuredFormatting?.mainText ??
+                  prediction.description;
+              mainText = mainText?.replaceFirst(type.street, '');
+              mainText = mainText?.trim();
+              if (mainText?[0] == ',') {
+                mainText = mainText?.substring(1);
+                mainText = mainText?.trim();
+
+                prediction.description = mainText;
+                break;
+              }
+          }
+        },
+      );
+    }
+
+    _removeDuplicates();
+  }
+
+  void _removeDuplicates() {
+    final seenDescriptions = <String?>{};
+    removeWhere((prediction) {
+      if (seenDescriptions.contains(prediction.description)) {
+        return true;
+      }
+      seenDescriptions.add(prediction.description);
+      return false;
+    });
   }
 }

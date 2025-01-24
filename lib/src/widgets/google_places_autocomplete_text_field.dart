@@ -77,6 +77,7 @@ class GooglePlacesAutoCompleteTextFormField extends StatefulWidget {
     this.contextMenuBuilder,
     this.validator,
     this.maxHeight = 200,
+    this.placeType,
     super.key,
   });
 
@@ -151,6 +152,9 @@ class GooglePlacesAutoCompleteTextFormField extends StatefulWidget {
   /// The maximum height of the suggestions list [OverlayContainer]. If a custom
   /// [overlayContainerBuilder] is provided, this value will be ignored.
   final double maxHeight;
+
+  /// The type of the place you want to receive suggestions for.
+  final PlaceType? placeType;
 
   // The following properties are the same as the ones in the TextFormField
   // widget. They are used to customize the text form field.
@@ -323,6 +327,7 @@ class _GooglePlacesAutoCompleteTextFormFieldState
       countries: widget.countries ?? [],
       sessionToken: widget.sessionToken,
       proxyUrl: widget.proxyURL ?? "",
+      placeType: widget.placeType,
     );
 
     if (result == null) return;

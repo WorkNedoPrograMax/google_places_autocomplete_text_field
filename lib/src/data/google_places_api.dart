@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_places_autocomplete_text_field/src/model/place_details.dart';
+import 'package:google_places_autocomplete_text_field/src/model/place_type.dart';
 import 'package:google_places_autocomplete_text_field/src/model/prediction.dart';
 
 /// {@template google_places_api}
@@ -26,6 +27,7 @@ class GooglePlacesApi {
     List<String> countries = const [],
     String? sessionToken,
     String proxyUrl = '',
+    PlaceType? placeType,
   }) async {
     final prefix = proxyUrl;
 
@@ -37,6 +39,25 @@ class GooglePlacesApi {
 
     if (countries.isNotEmpty) {
       requestBody["includedRegionCodes"] = countries;
+    }
+    if (placeType != null) {
+      switch (placeType) {
+        case City():
+          requestBody["includedPrimaryTypes"] = "(cities)";
+          break;
+
+        case PostalCode():
+          requestBody["includedPrimaryTypes"] = "postal_code";
+          break;
+        case Street():
+          requestBody['input'] =
+              "${placeType.city},  +  ${requestBody['input']}";
+          break;
+        case Building():
+          requestBody['input'] =
+              "${placeType.city}, ${placeType.street}, ${requestBody['input']}";
+          break;
+      }
     }
     if (sessionToken != null) {
       requestBody["sessionToken"] = sessionToken;
@@ -50,6 +71,8 @@ class GooglePlacesApi {
           await _dio.post(url, options: options, data: jsonEncode(requestBody));
       final subscriptionResponse =
           PlacesAutocompleteResponse.fromJson(response.data);
+      subscriptionResponse.predictions
+          ?.reformatDescriptionsBasedOnPlaceType(placeType);
       return subscriptionResponse;
     } catch (e) {
       debugPrint('GooglePlacesApi.getSuggestionsForInput: ${e.toString()}');
